@@ -17,5 +17,4 @@ public class Match {
     //dynamic variables
     private String status;
     private String score;
-//    private String time;
 }

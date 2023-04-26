@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<!--	<link rel="stylesheet" type="text/css" href="\static\css\style.css">-->
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Epl-prediction</title>
+</head>
+<body>
+	<header>
+<!--		<img src="..\static\images\Football_Soccer_Ball_Logo.png">-->
+		<img th:src="@{/images/Football_Soccer_Ball_Logo.png}" />
+		<h1>EPL-Prediction</h1>
+		<div id="headerButtons">
+			<div class="headerButton">
+				<a href="#">Schedule</a>
+			</div>
+			<div class="headerButton">
+				<a href="#">Table</a>
+			</div>
+		</div>
+		<div class="headerButton">
+			<a href="#">Sign in /</a>
+			<a href="#">Sign up</a>
+		</div>
+	</header>
+	<h3>By Date</h3>
+	<table class="calendar">
+		<thead class="calendar_head">
+			<th class="calendar_head_text">Date</th>
+			<th class="calendar_head_text">Hosts</th>
+			<th class="calendar_head_text">Score</th>
+			<th class="calendar_head_text">Guests</th>
+			<th class="calendar_head_text">More Details</th>
+		</thead>
+		<tbody>
+			<div th:each="e : ${matches}">
+				<tr class="calendar_match">
+					<td class="calendar_match_info" th:text="${e.getTime}"></td>
+					<td class="calendar_match_info" th:text="${e.homeName}"></td>
+					<td class="calendar_match_info match_score" th:text="${e.score}"></td>
+					<td class="calendar_match_info" th:text="${e.awayName}"></td>
+					<td class="calendar_match_info"></td>
+				</tr>
+			</div>
+		</tbody>
+	</table>
+<footer>
+	<div class="footer_line">
+		<div class="footer_info">
+			<p>© 2023 Epl-prediction</p>
+			<a href="#">Support</a>
+		</div>
+	</div>
+</footer>
+</body>
+</html>

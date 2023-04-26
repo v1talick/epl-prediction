@@ -1,4 +1,4 @@
-package com.OOP.eplpredictions.processors;
+package com.OOP.eplpredictions.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,9 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public abstract class ApiProcessor {
-    private static final String key = "phKuvBohYEATSTSx";
-    private static final String secret = "nVsIw2tSxYyJhlBGClb8WAqVf0O7UHFh";
+public abstract class ApiUtil {
 
     public static String apiToString(String link) {
         HttpURLConnection connection = null;

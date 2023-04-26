@@ -1,10 +1,7 @@
 package com.OOP.eplpredictions.repositories.impl;
 
-import com.OOP.eplpredictions.connections.SessionFactoryHolder;
 import com.OOP.eplpredictions.entities.MatchEntity;
 import com.OOP.eplpredictions.repositories.MatchRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,7 +10,6 @@ import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -112,4 +108,5 @@ public class MatchRepositoryImpl implements MatchRepository {
     public Session getSession() {
         return sessionFactory.openSession();
     }
+
 }
