@@ -52,6 +52,12 @@ public class MatchServiceImpl implements MatchService {
         return matchEntities.stream().map(this::matchEntityToMatch).toList();
     }
 
+    @Override
+    public List<Match> getSchedule() {
+        return getAllMatches().stream().filter(match -> !DateUtil.isFirstDate7DaysLater(match.getTime(), new Date())
+                && new Date().before(match.getTime())).toList();
+    }
+
     private Match matchEntityToMatch(MatchEntity matchEntity) {
         if (!Objects.equals(matchEntity.getStatus(), "incomplete")) {
             return Match.builder()
@@ -64,7 +70,8 @@ public class MatchServiceImpl implements MatchService {
                     .build();
         }
 
-        if (!DateUtil.compareDates(new Date(), matchEntity.getTime())) { //checks if date is  later than today
+//        if (!DateUtil.isDateLater(new Date(), matchEntity.getTime())) {
+        if(new Date().before(matchEntity.getTime())){// checks if date is  later than today
             return Match.builder()
                     .id(matchEntity.getId())
                     .homeName(matchEntity.getHomeName())
@@ -79,6 +86,7 @@ public class MatchServiceImpl implements MatchService {
 
         if (Objects.equals(match.getStatus(), "complete")) {
             matchRepository.update(matchToMatchEntity(match));
+            System.out.println(matchEntity.getTime());
         }
 
         return match;

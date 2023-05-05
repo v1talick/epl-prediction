@@ -31,7 +31,10 @@ public class MatchController {
 
     @GetMapping("/schedule")
     public String schedule(Model model) {
-        Iterable<Match> matches = matchService.getAllMatches();
+        Iterable<Match> matches
+                = matchService.getSchedule();
+//                = matchService.getAllMatches();
+
         model.addAttribute("matches", matches);
         return "schedule";
     }

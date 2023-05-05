@@ -14,4 +14,5 @@ public interface MatchService {
     Match getMatchById(int matchId);
 
     List<Match> getAllMatches();
+    List<Match> getSchedule();
 }
