@@ -112,10 +112,4 @@ public class FootballDataApiRepositoryImpl implements MatchApiRepository {
 
         return match;
     }
-
-//    public static void main(String[] args) {
-//        MatchApiRepository matchApiRepository = new FootballDataApiRepositoryImpl();
-//        System.out.println(matchApiRepository.getScore(2782365));
-//        System.out.println(matchApiRepository.getStatus(2782365));
-//    }
 }

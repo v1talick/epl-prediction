@@ -70,7 +70,6 @@ public class MatchServiceImpl implements MatchService {
                     .build();
         }
 
-//        if (!DateUtil.isDateLater(new Date(), matchEntity.getTime())) {
         if(new Date().before(matchEntity.getTime())){// checks if date is  later than today
             return Match.builder()
                     .id(matchEntity.getId())
