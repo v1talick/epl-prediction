@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<!--suppress InjectedReferences -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Epl-prediction</title>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+<h4>Login</h4>
+<form action="/login" method="post" name="login">
+    <label for="username">Email</label>
+    <input type="email" name="username">
+    <label for="password">Password</label>
+    <input type="password" name="password">
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
+    <input type="submit" value="Login">
+</form>
+<a href="/registration">Register</a>
+<footer th:insert="~{blocks/footer :: footer}"></footer>
+</body>
+</html>

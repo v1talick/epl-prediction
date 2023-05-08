@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--	<link rel="stylesheet" type="text/css" href="\static\css\style.css">-->
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/MyCSS.css"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Epl-prediction</title>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+<form action="/logout" method="post">
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
+    <input type="submit" value="Exit">
+</form>
+<footer th:insert="~{blocks/footer :: footer}"></footer>
+</body>
+</html>
