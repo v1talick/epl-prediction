@@ -6,6 +6,7 @@ import com.OOP.eplpredictions.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,6 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-
 
     public boolean createUser(User user) {
         if (userRepository.findByEmail(user.getEmail()) != null)
@@ -39,8 +38,5 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-//    public static void main(String[] args) {
-//        new UserService().createUser(new User(1,"test@d","v",1000, true, "d"));
-//    }
 }
 
