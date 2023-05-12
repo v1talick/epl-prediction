@@ -10,18 +10,21 @@ header{
 	background: #222222;
 }
 
-header img{
+header div:first-child{
+	display: flex;
+	width: 100%;
+}
+
+header div:first-child img{
     margin-left: 25%;
 	width: 40px;
 	height: 40px;
 }
 
-header h1{
+header div:first-child h1{
 	margin-top: 0;
 	margin-left: 10px;
 	color: #FFFFFF;
-
-
 }
 
 #headerButtons{
@@ -44,7 +47,6 @@ header h1{
 	margin-left: 30px;
 	margin-top: 3px;
 	border-radius: 5px;
-
 }
 
 .headerButton:hover{
@@ -52,8 +54,7 @@ header h1{
 }
 
 
-header a {
-
+header div:first-child a {
 	font-family: 'Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif';
 	height: 20px;
 	margin-top: 8px;
@@ -62,7 +63,6 @@ header a {
 }
 
 .calendar{
-
 	border-collapse: collapse;
 	background: #f2f2f2;
 	margin-left: 25%;
@@ -126,5 +126,9 @@ footer p, footer a{
 	color: #000000;
 	line-height: 28px;
 	margin: 12px;
+}
+
+form[name="registration"], form[name="login"], form[name="login"] ~ a, form[name="registration"] ~ a{
+	margin-left: 25%;
 }
 

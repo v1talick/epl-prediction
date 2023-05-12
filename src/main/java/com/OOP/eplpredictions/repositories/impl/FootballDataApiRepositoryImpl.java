@@ -5,15 +5,20 @@ import com.OOP.eplpredictions.utils.ApiUtil;
 import com.OOP.eplpredictions.repositories.MatchApiRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Component
 public class FootballDataApiRepositoryImpl implements MatchApiRepository {
     private final String key = "test85g57";
     private final int seasonId = 7704; // EPL season 2022/2023
+
 
     @Override
     public List<Match> getAllMatches() {

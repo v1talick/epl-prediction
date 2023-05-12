@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class MatchServiceImpl implements MatchService {
@@ -20,9 +21,9 @@ public class MatchServiceImpl implements MatchService {
     private final MatchApiRepository apiRepository;
 
     @Autowired
-    public MatchServiceImpl(MatchRepository matchRepository) {
+    public MatchServiceImpl(MatchRepository matchRepository, MatchApiRepository matchApiRepository) {
         this.matchRepository = matchRepository;
-        this.apiRepository = new FootballDataApiRepositoryImpl();
+        this.apiRepository = matchApiRepository;
     }
 
     @Override
@@ -32,18 +33,19 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public Match updateMatch(Match match) {
-        return matchEntityToMatch(matchRepository.update(matchToMatchEntity(match)));
+        return matchEntityToMatch(matchRepository.save(matchToMatchEntity(match)));
     }
 
     @Override
     public void deleteMatch(int id) {
-        matchRepository.delete(id);
+        matchRepository.deleteById(id);
     }
 
     @Override
     public Match getMatchById(int matchId) {
-        MatchEntity match = matchRepository.findById(matchId);
-        return matchEntityToMatch(match);
+//        MatchEntity match = matchRepository.findById(matchId);
+        Optional<MatchEntity> match = matchRepository.findById(matchId);
+        return matchEntityToMatch(match.get());
     }
 
     @Override
@@ -84,7 +86,7 @@ public class MatchServiceImpl implements MatchService {
         Match match = apiRepository.getMatch(matchEntity.getId());
 
         if (Objects.equals(match.getStatus(), "complete")) {
-            matchRepository.update(matchToMatchEntity(match));
+            matchRepository.save(matchToMatchEntity(match));
             System.out.println(matchEntity.getTime());
         }
 
