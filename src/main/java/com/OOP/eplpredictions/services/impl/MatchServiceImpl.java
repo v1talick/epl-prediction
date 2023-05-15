@@ -42,10 +42,10 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public Match getMatchById(int matchId) {
+    public Optional<Match> getMatchById(int matchId) {
 //        MatchEntity match = matchRepository.findById(matchId);
         Optional<MatchEntity> match = matchRepository.findById(matchId);
-        return matchEntityToMatch(match.get());
+        return match.map(this::matchEntityToMatch);
     }
 
     @Override
@@ -56,8 +56,10 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public List<Match> getSchedule() {
-        return getAllMatches().stream().filter(match -> !DateUtil.isFirstDate7DaysLater(match.getTime(), new Date())
-                && new Date().before(match.getTime())).toList();
+        return getAllMatches().stream()
+                .filter(match -> DateUtil.isScheduleDate(match.getTime())).toList();
+//                .filter(match -> !DateUtil.isFirstDate7DaysLater(match.getTime(), new Date())
+//                && new Date().before(match.getTime())).toList();
     }
 
     private Match matchEntityToMatch(MatchEntity matchEntity) {

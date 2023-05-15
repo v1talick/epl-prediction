@@ -1,24 +1,14 @@
 package com.OOP.eplpredictions.service;
 
 import com.OOP.eplpredictions.entities.User;
-import com.OOP.eplpredictions.entities.enums.Role;
-import com.OOP.eplpredictions.repositories.UserRepository;
-import com.OOP.eplpredictions.services.UserService;
+import com.OOP.eplpredictions.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.time.LocalDateTime;
-import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
 
 //@ExtendWith(MockitoExtension.class)
 //public class UserServiceTest {
@@ -43,7 +33,7 @@ import static org.mockito.Mockito.when;
 public class UserServiceTest {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Test
     public void testSaveUser() {

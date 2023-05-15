@@ -2,6 +2,7 @@ package com.OOP.eplpredictions.controllers;
 
 import com.OOP.eplpredictions.entities.User;
 import com.OOP.eplpredictions.services.UserService;
+import com.OOP.eplpredictions.services.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
