@@ -1,16 +1,18 @@
-<div th:fragment="header">
-    <img th:src="@{/images/Football_Soccer_Ball_Logo.png}"/>
-    <h1>EPL-Prediction</h1>
-    <div id="headerButtons">
-        <div class="headerButton">
-            <a href="/schedule">Schedule</a>
-        </div>
-        <div class="headerButton">
-            <a href="#">Table</a>
-        </div>
-    </div>
-    <div class="headerButton">
-        <a href="/login">Sign in /</a>
-        <a href="/registration">Sign up</a>
+<div class="container" th:fragment="header">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
+            <li><a href="/schedule" class="nav-link text-white">Schedule</a></li>
+            <li><a href="/table" class="nav-link px-2 text-white">Table</a></li>
+            <li><a href="/profile" class="nav-link px-2 text-white">Profile</a></li>
+        </ul>
+        <ul class="nav nav-pills text-end">
+            <li class="nav-item me-2">
+                <a class="nav-link link-warning" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link bg-warning link-dark" aria-current="page" href="/registration">Sign-up</a>
+            </li>
+        </ul>
     </div>
 </div>
