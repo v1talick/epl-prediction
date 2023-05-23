@@ -3,33 +3,40 @@
 <head>
     <!--	<link rel="stylesheet" type="text/css" href="\static\css\style.css">-->
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Epl-prediction</title>
 </head>
 <body>
-<header th:insert="~{blocks/header :: header}"></header>
-<h3>By Date</h3>
-<table class="calendar">
-    <thead class="calendar_head">
-    <th class="calendar_head_text">Date</th>
-    <th class="calendar_head_text">Hosts</th>
-    <th class="calendar_head_text">Score</th>
-    <th class="calendar_head_text">Guests</th>
-    <th class="calendar_head_text">More Details</th>
-    </thead>
-    <tbody>
-    <div th:each="e : ${matches}">
-        <tr class="calendar_match">
-            <td class="calendar_match_info" th:text="${e.getTime}"></td>
-            <td class="calendar_match_info" th:text="${e.homeName}"></td>
-            <td class="calendar_match_info match_score" th:text="${e.score}"></td>
-            <td class="calendar_match_info" th:text="${e.awayName}"></td>
-            <td class="calendar_match_info"></td>
-        </tr>
+<header th:insert="~{blocks/header :: header}" class="p-3 bg-dark text-white"></header>
+<div class="container"><br>
+    <h3>By Date</h3><br>
+    <div class="row">
+        <table class="table table-bordered table-hover table-condensed col-md-6">
+            <thead class="success">
+            <th class="text-center table-active">Date</th>
+            <th class="text-center table-active">Hosts</th>
+            <th class="text-center table-active">Score</th>
+            <th class="text-center table-active">Guests</th>
+            <th class="text-center table-active">More Details</th>
+            </thead>
+            <tbody>
+            <div th:each="e : ${matches}">
+                <tr class="calendar_match">
+                    <td class="px-6" th:text="${e.getTime}"></td>
+                    <td class="px-6" th:text="${e.homeTeam.name}"></td>
+                    <td class="px-6 text-center table-active" th:text="${e.score}"></td>
+                    <td class="px-6" th:text="${e.awayTeam.name}"></td>
+                    <td class="px-6"></td>
+                </tr>
+            </div>
+            </tbody>
+        </table>
     </div>
-    </tbody>
-</table>
-<footer th:insert="~{blocks/footer :: footer}"></footer>
+</div>
+<br><br>
+<footer th:insert="~{blocks/footer :: footer}" class="container"></footer>
 </body>
 </html>
