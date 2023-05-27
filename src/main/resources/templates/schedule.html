@@ -26,9 +26,9 @@
             <div th:each="e : ${matches}">
                 <tr class="calendar_match">
                     <td class="px-6" th:text="${e.getTime}"></td>
-                    <td class="px-6" th:text="${e.homeName}"></td>
+                    <td class="px-6" th:text="${e.homeTeam.name}"></td>
                     <td class="px-6 text-center table-active" th:text="${e.score}"></td>
-                    <td class="px-6" th:text="${e.awayName}"></td>
+                    <td class="px-6" th:text="${e.awayTeam.name}"></td>
                     <td class="px-6"></td>
                 </tr>
             </div>

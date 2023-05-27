@@ -10,8 +10,8 @@ import java.util.Date;
 @Builder
 public class Match {
     private int id;
-    private String homeName;
-    private String awayName;
+    private Club homeTeam;
+    private Club awayTeam;
     private Date time;
 
     //dynamic variables

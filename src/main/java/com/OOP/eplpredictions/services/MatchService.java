@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MatchService {
-    Match createMatch(Match match);
-
+    void createMatch(Match match);
+    void createAllMatches(List<Match> matches);
     Match updateMatch(Match match);
 
     void deleteMatch(int id);
