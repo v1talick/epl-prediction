@@ -134,6 +134,7 @@ public class MatchServiceImpl implements MatchService {
                 .id(club.getId())
                 .country(club.getCountry())
                 .name(club.getName())
+                .logoLink(club.getLogoLink())
                 .build();
     }
 

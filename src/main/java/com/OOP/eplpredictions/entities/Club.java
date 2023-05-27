@@ -16,7 +16,7 @@ public class Club {
     private String name;
     private String country;
 //    private int founded;
-//    private String logoLink;
+    private String logoLink;
     private int tablePosition;
     private int points;
     private int seasonWins;
