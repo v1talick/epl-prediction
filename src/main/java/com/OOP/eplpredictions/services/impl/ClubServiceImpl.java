@@ -52,6 +52,7 @@ public class ClubServiceImpl implements ClubService {
                 .id(club.getId())
                 .country(club.getCountry())
                 .name(club.getName())
+                .logoLink(club.getLogoLink())
                 .build();
     }
 

@@ -37,6 +37,4 @@ public class MatchEntity {
     @Column(name = "status")
     private String status;
 
-
-
 }

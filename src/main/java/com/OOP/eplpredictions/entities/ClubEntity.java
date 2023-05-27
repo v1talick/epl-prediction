@@ -26,5 +26,6 @@ public class ClubEntity {
 //    @Column(name = "founded")
 //    private int founded;
 
-//    private String logoLink;
+    @Column(name = "logo_link")
+    private String logoLink;
 }

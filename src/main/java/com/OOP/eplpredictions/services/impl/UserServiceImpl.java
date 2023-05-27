@@ -7,6 +7,7 @@ import com.OOP.eplpredictions.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
             return false;
 
         user.setActive(true);
+        user.setPoints(1000);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().add(Role.ROLE_USER);
         userRepository.save(user);
