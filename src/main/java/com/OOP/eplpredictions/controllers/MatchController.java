@@ -1,7 +1,6 @@
 package com.OOP.eplpredictions.controllers;
 
 
-import com.OOP.eplpredictions.entities.Club;
 import com.OOP.eplpredictions.entities.Match;
 import com.OOP.eplpredictions.services.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -39,6 +39,12 @@ public class MatchController {
 
         model.addAttribute("matches", matches);
         return "schedule";
+    }
+
+    @GetMapping("/match/{id}")
+    public String match(@PathVariable int id, Model model){
+        matchService.getMatchById(id).ifPresent(o -> model.addAttribute("match", o));
+        return "match";
     }
 
 }

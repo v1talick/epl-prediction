@@ -27,11 +27,11 @@ public class EplPredictionsApplication {
         SpringApplication.run(EplPredictionsApplication.class, args);
     }
 
-    @PostConstruct
-    public void test() {
-        List<Match> matches = new FootballDataApiRepositoryImpl().getAllMatches();
-        matchService.createAllMatches(matches);
-    }
+//    @PostConstruct
+//    public void test() {
+//        List<Match> matches = new FootballDataApiRepositoryImpl().getAllMatches();
+//        matchService.createAllMatches(matches);
+//    }
 
 
     public EplPredictionsApplication(UserService userService, MatchService matchService, PredictionService predictionService) {

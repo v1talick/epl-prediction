@@ -26,7 +26,7 @@ public class UserController {
 
     @PostMapping("/registration")
     public String userAdd(User user, Model model) {
-        if (!userService.createUser(user)) {
+        if (userService.createUser(user)) {
             model.addAttribute("Error", "Email " + user.getEmail() + "has already been used");
             return "registration";
         }

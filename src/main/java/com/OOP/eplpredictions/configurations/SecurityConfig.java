@@ -25,11 +25,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/registration", "/schedule", "/login", "/css/style.css","https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css").permitAll()
-                        .requestMatchers("/profile/**")
+                        .requestMatchers("/profile")
                         .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers("/", "/error","/table", "/club/**","/match/**","/registration", "/schedule", "/css/style.css", "https://icons-for-free.com/download-icon-basketball-131983719702443362_512.png")
+                        .permitAll()
                         .anyRequest().authenticated()
-//                        .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
                 )
 //                .headers(headers -> headers.frameOptions().disable())
                 .formLogin((form) -> form
