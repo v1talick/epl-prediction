@@ -11,12 +11,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateUsers(List<User> users) {
+        userRepository.saveAll(users);
+    }
 
     @Override
     public boolean createUser(User user) {

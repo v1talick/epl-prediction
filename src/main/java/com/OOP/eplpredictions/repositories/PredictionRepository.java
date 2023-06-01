@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface PredictionRepository extends JpaRepository<PredictionEntity, Integer> {
-//    @Query("SELECT p FROM predictions WHERE p.'match' = ?1")
-//    List<PredictionEntity> findPredictionByMatchId(int matchId);
+    @Query("SELECT p FROM PredictionEntity p WHERE p.match.id = :matchId")
+    List<PredictionEntity> findPredictionByMatchId(int matchId);
 }

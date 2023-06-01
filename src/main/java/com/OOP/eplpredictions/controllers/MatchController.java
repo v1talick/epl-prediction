@@ -22,27 +22,31 @@ public class MatchController {
         this.matchService = matchService;
     }
 
-    @GetMapping(path = "/matches")
-    public ResponseEntity<List<Match>> listMatches() {
-        return new ResponseEntity<>(matchService.getAllMatches(), HttpStatus.OK);
-    }
-//    @GetMapping(path = "/table")
-//    public ResponseEntity<List<Club>> table(){
-//        return new ResponseEntity<>(matchService.)
+//    @GetMapping(path = "/matches")
+//    public ResponseEntity<List<Match>> listMatches() {
+//        return new ResponseEntity<>(matchService.getAllMatches(), HttpStatus.OK);
 //    }
+    @GetMapping("/matches")
+    public String matches(Model model) {
+        Iterable<Match> matches
+//                = matchService.getSchedule();
+                = matchService.getAllMatches();
+
+        model.addAttribute("matches", matches);
+        return "schedule";
+    }
 
     @GetMapping("/schedule")
     public String schedule(Model model) {
         Iterable<Match> matches
                 = matchService.getSchedule();
-//                = matchService.getAllMatches();
 
         model.addAttribute("matches", matches);
         return "schedule";
     }
 
     @GetMapping("/match/{id}")
-    public String match(@PathVariable int id, Model model){
+    public String match(@PathVariable int id, Model model) {
         matchService.getMatchById(id).ifPresent(o -> model.addAttribute("match", o));
         return "match";
     }

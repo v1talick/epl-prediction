@@ -7,6 +7,7 @@ import com.OOP.eplpredictions.entities.MatchEntity;
 import com.OOP.eplpredictions.repositories.ApiRepository;
 import com.OOP.eplpredictions.repositories.MatchRepository;
 import com.OOP.eplpredictions.services.MatchService;
+import com.OOP.eplpredictions.services.PredictionService;
 import com.OOP.eplpredictions.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,15 @@ import java.util.Optional;
 public class MatchServiceImpl implements MatchService {
     private final MatchRepository matchRepository;
     private final ApiRepository apiRepository;
-
+    private final PredictionService predictionService;
     private final List<Club> clubs;
 
+
     @Autowired
-    public MatchServiceImpl(MatchRepository matchRepository, ApiRepository apiRepository) {
+    public MatchServiceImpl(MatchRepository matchRepository, ApiRepository apiRepository, PredictionService predictionService) {
         this.matchRepository = matchRepository;
         this.apiRepository = apiRepository;
+        this.predictionService = predictionService;
         this.clubs = apiRepository.getAllClubs();
     }
 
@@ -77,19 +80,15 @@ public class MatchServiceImpl implements MatchService {
         if (!Objects.equals(matchEntity.getStatus(), "incomplete")) {
             return Match.builder()
                     .id(matchEntity.getId())
-//                    .homeName(matchEntity.getHomeName())
-//                    .awayName(matchEntity.getAwayName())
-
                     .homeTeam(clubEntityToClub(matchEntity.getHomeTeam()))
                     .awayTeam(clubEntityToClub(matchEntity.getAwayTeam()))
-
                     .time(matchEntity.getTime())
                     .score(matchEntity.getStatus())
                     .status("complete")
                     .build();
         }
 
-        if(new Date().before(matchEntity.getTime())){// checks if date is  later than today
+        if(new Date().before(matchEntity.getTime())){// checks if date is  later than current time
             return Match.builder()
                     .id(matchEntity.getId())
 //                    .homeName(matchEntity.getHomeName())
@@ -106,7 +105,7 @@ public class MatchServiceImpl implements MatchService {
 
         if (Objects.equals(match.getStatus(), "complete")) {
             matchRepository.save(matchToMatchEntity(match));
-            System.out.println(matchEntity.getTime());
+            predictionService.payOffMatchPredictions(match.getId());
         }
 
         return match;

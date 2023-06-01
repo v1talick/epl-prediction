@@ -27,7 +27,8 @@
                 <tr>
                     <td class="px-6" th:text="${e.getTime}"></td>
                     <td class="px-6"><a th:href="@{'/club/'+${e.homeTeam.id}}" th:text="${e.homeTeam.name}" class="link-dark link-underline-opacity-0"></a></td>
-                    <td class="px-6 text-center table-active" th:text="${e.score}"></td>
+<!--                    <td class="px-6 text-center table-active" th:text="${e.score}"></td>-->
+                    <td class="px-6 text-center table-active"><a th:href="@{'/match/'+${e.id}}" th:text="${e.score}" class="link-dark link-underline-opacity-0"></a></td>
                     <td class="px-6"><a th:href="@{'/club/'+${e.awayTeam.id}}" th:text="${e.awayTeam.name}" class="link-dark link-underline-opacity-0"></a></td>
                     <td class="px-6"><a th:href="@{'/match/'+${e.id}}" class="link-dark link-underline-opacity-0"> More Details </a> </td>
                 </tr>

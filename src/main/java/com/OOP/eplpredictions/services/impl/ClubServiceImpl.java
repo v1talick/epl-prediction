@@ -12,8 +12,8 @@ import java.util.List;
 
 @Service
 public class ClubServiceImpl implements ClubService {
-    private ClubRepository clubRepository;
-    private ApiRepository apiRepository;
+    private final ClubRepository clubRepository;
+    private final ApiRepository apiRepository;
 
     public ClubServiceImpl(ClubRepository clubRepository, ApiRepository apiRepository) {
         this.clubRepository = clubRepository;
