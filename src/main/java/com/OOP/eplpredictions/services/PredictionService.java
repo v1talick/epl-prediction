@@ -5,7 +5,7 @@ import com.OOP.eplpredictions.entities.Prediction;
 import java.util.List;
 
 public interface PredictionService {
-    public void createPrediction(Prediction prediction);
+    public boolean createPrediction(Prediction prediction);
 
     public Prediction getPrediction(int id);
 

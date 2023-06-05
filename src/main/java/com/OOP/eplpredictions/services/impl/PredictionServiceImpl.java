@@ -21,15 +21,17 @@ public class PredictionServiceImpl implements PredictionService {
     private final UserService userService;
 
     @Override
-    public void createPrediction(Prediction prediction) {
+    public boolean createPrediction(Prediction prediction) {
         if (!Objects.equals(prediction.getMatch().getStatus(), "incomplete")
                 || prediction.getUser().getPoints() < prediction.getPoints()) {
             //u cant make a match prediction that is finished
+            return true;
         } else {
             User user = prediction.getUser();
             user.setPoints(user.getPoints() - prediction.getPoints());
             userService.updateUser(user);
             predictionRepository.save(predictionToPredictionEntity(prediction));
+            return false;
         }
     }
 

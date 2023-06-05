@@ -28,6 +28,21 @@
             <h2 th:text="${match.awayTeam.name}"class="col-md-3 offset-md-4 text-center"></h2>
         </div>
     </div><br>
+    <h1>Make a bet</h1>
+    <form action="/bet" method="post">
+        <label for="amount">Bet Amount:</label>
+        <input type="number" id="amount" name="amount" required><br><br>
+
+        <label for="team">Select outcome:</label>
+        <select id="team" name="team">
+            <option value="HOME_WIN" th:text="${match.homeTeam.name}" ></option>
+            <option value="AWAY_WIN" th:text="${match.awayTeam.name}"></option>
+            <option value="DRAW">Draw</option>
+        </select><br><br>
+
+        <input type="submit" value="Bet">
+    </form>
+
 </div>
 <br><br>
 <footer th:insert="~{blocks/footer :: footer}" class="container"></footer>

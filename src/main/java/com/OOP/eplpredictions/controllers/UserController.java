@@ -34,7 +34,8 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public String profile() {
+    public String profile(Model model) {
+        model.addAttribute("user", model);
         return "profile";
     }
 }
