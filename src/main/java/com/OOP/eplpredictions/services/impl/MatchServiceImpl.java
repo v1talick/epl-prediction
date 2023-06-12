@@ -88,7 +88,7 @@ public class MatchServiceImpl implements MatchService {
                     .build();
         }
 
-        if(new Date().before(matchEntity.getTime())){// checks if date is  later than current time
+        if (new Date().before(matchEntity.getTime())) {// checks if date is  later than current time
             return Match.builder()
                     .id(matchEntity.getId())
 //                    .homeName(matchEntity.getHomeName())
@@ -128,7 +128,7 @@ public class MatchServiceImpl implements MatchService {
         return matchEntity;
     }
 
-    private ClubEntity clubToClubEntity (Club club) {
+    private ClubEntity clubToClubEntity(Club club) {
         return ClubEntity.builder()
                 .id(club.getId())
                 .country(club.getCountry())
@@ -137,7 +137,7 @@ public class MatchServiceImpl implements MatchService {
                 .build();
     }
 
-    private Club clubEntityToClub (ClubEntity clubEntity) {
+    private Club clubEntityToClub(ClubEntity clubEntity) {
 //        return apiRepository.getClub(clubEntity.getId());
         return clubs.stream().filter(club -> club.getId() == clubEntity.getId()).findFirst().orElse(new Club());
     }

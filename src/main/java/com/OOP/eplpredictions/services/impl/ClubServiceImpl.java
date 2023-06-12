@@ -47,7 +47,7 @@ public class ClubServiceImpl implements ClubService {
         return clubs;
     }
 
-    private ClubEntity clubToClubEntity (Club club) {
+    private ClubEntity clubToClubEntity(Club club) {
         return ClubEntity.builder()
                 .id(club.getId())
                 .country(club.getCountry())
@@ -56,7 +56,7 @@ public class ClubServiceImpl implements ClubService {
                 .build();
     }
 
-    private Club clubEntityToClub (ClubEntity clubEntity) {
+    private Club clubEntityToClub(ClubEntity clubEntity) {
         return apiRepository.getClub(clubEntity.getId());
 //        return clubs.stream().filter(club -> club.getId() == clubEntity.getId()).findFirst().orElse(new Club());
     }

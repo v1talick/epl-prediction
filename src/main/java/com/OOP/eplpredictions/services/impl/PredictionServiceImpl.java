@@ -20,19 +20,25 @@ public class PredictionServiceImpl implements PredictionService {
     private final PredictionRepository predictionRepository;
     private final UserService userService;
 
+    public PredictionServiceImpl(PredictionRepository predictionRepository, UserService userService) {
+        this.predictionRepository = predictionRepository;
+        this.userService = userService;
+    }
+
     @Override
     public boolean createPrediction(Prediction prediction) {
+        System.out.println("\n\n\n" + prediction);
         if (!Objects.equals(prediction.getMatch().getStatus(), "incomplete")
-                || prediction.getUser().getPoints() < prediction.getPoints()) {
+                || prediction.getUser().getPoints() < prediction.getPoints() || prediction.getPoints() <= 0) {
             //u cant make a match prediction that is finished
             return true;
-        } else {
-            User user = prediction.getUser();
-            user.setPoints(user.getPoints() - prediction.getPoints());
-            userService.updateUser(user);
-            predictionRepository.save(predictionToPredictionEntity(prediction));
-            return false;
         }
+        User user = prediction.getUser();
+        user.setPoints(user.getPoints() - prediction.getPoints());
+        userService.updateUser(user);
+        predictionRepository.save(predictionToPredictionEntity(prediction));
+
+        return false;
     }
 
     @Override
@@ -45,19 +51,20 @@ public class PredictionServiceImpl implements PredictionService {
     public void payOffMatchPredictions(int matchId) {
         List<Prediction> allPredictions = predictionRepository.findPredictionByMatchId(matchId)
                 .stream().map(this::predictionEntityToPrediction).toList();
-        if(!allPredictions.isEmpty()){
+        if (!allPredictions.isEmpty()) {
             countPointsToUser(allPredictions);
         }
     }
+
     private void countPointsToUser(List<Prediction> predictions) {
         int allPoints = predictions.stream().mapToInt(Prediction::getPoints).sum();
         Result matchResult = getResult(predictions.get(0).getMatch().getStatus());
         List<Prediction> wonPredictions = predictions
                 .stream().filter(prediction -> prediction.getResult() == matchResult).toList();
 
-        if(!wonPredictions.isEmpty()) {
+        if (!wonPredictions.isEmpty()) {
             int winPoints = wonPredictions.stream().mapToInt(Prediction::getPoints).sum();
-            double coefficient = (allPoints - winPoints) / (double)winPoints;
+            double coefficient = (allPoints - winPoints) / (double) winPoints;
             List<User> wonUsers = new ArrayList<>();
             for (Prediction p :
                     wonPredictions) {
@@ -68,6 +75,7 @@ public class PredictionServiceImpl implements PredictionService {
             userService.updateUsers(wonUsers);
         }
     }
+
     private Result getResult(String score) {
         Pattern pattern = Pattern.compile("(\\d+) - (\\d+)");
         Matcher matcher = pattern.matcher(score);
@@ -86,7 +94,6 @@ public class PredictionServiceImpl implements PredictionService {
         return Result.DRAW;
     }
 
-
     @Override
     public List<Prediction> getPredictionsByMatchId(int matchId) {
         return predictionRepository.findPredictionByMatchId(matchId)
@@ -98,11 +105,6 @@ public class PredictionServiceImpl implements PredictionService {
     public List<Prediction> getAllPredictions() {
         return predictionRepository.findAll().stream()
                 .map(this::predictionEntityToPrediction).toList();
-    }
-
-    public PredictionServiceImpl(PredictionRepository predictionRepository, UserService userService) {
-        this.predictionRepository = predictionRepository;
-        this.userService = userService;
     }
 
     private Prediction predictionEntityToPrediction(PredictionEntity predictionEntity) {

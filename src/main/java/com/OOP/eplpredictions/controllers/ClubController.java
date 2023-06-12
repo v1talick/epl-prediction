@@ -21,14 +21,14 @@ public class ClubController {
     }
 
     @GetMapping(path = "/table")
-    public String table(Model model){
+    public String table(Model model) {
         Iterable<Club> clubs = clubService.getAllClubs();
         model.addAttribute("clubs", clubs);
         return "table";
     }
 
     @GetMapping(path = "/club/{id}")
-    public String club(@PathVariable int id, Model model){
+    public String club(@PathVariable int id, Model model) {
         model.addAttribute("club", clubService.getClub(id));
         return "club";
     }

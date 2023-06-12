@@ -12,7 +12,8 @@ public class DateUtil {
 
         return differenceInMillis >= sevenDaysInMillis;
     }
-    public static boolean isScheduleDate(Date date){
+
+    public static boolean isScheduleDate(Date date) {
 
         // Get today's date
         Calendar today = Calendar.getInstance();
@@ -31,11 +32,7 @@ public class DateUtil {
         sevenDaysLater.add(Calendar.DAY_OF_MONTH, 7);
 
         // Check if the date falls within the valid range
-        if (cal.before(twoDaysAgo) || cal.after(sevenDaysLater)) {
-            return false;
-        }
-
-        return true;
+        return !cal.before(twoDaysAgo) && !cal.after(sevenDaysLater);
     }
 
 }

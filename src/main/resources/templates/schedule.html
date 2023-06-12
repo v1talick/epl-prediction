@@ -3,14 +3,14 @@
 <head>
     <!--	<link rel="stylesheet" type="text/css" href="\static\css\style.css">-->
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" rel="stylesheet">
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>Epl-prediction</title>
 </head>
 <body>
-<header th:insert="~{blocks/header :: header}" class="p-3 bg-dark text-white"></header>
+<header class="p-3 bg-dark text-white" th:insert="~{blocks/header :: header}"></header>
 <div class="container"><br>
     <h3>2022/2023 Season</h3><br>
     <div class="row">
@@ -26,11 +26,15 @@
             <div th:each="e : ${matches}">
                 <tr>
                     <td class="px-6" th:text="${e.getTime}"></td>
-                    <td class="px-6"><a th:href="@{'/club/'+${e.homeTeam.id}}" th:text="${e.homeTeam.name}" class="link-dark link-underline-opacity-0"></a></td>
-<!--                    <td class="px-6 text-center table-active" th:text="${e.score}"></td>-->
-                    <td class="px-6 text-center table-active"><a th:href="@{'/match/'+${e.id}}" th:text="${e.score}" class="link-dark link-underline-opacity-0"></a></td>
-                    <td class="px-6"><a th:href="@{'/club/'+${e.awayTeam.id}}" th:text="${e.awayTeam.name}" class="link-dark link-underline-opacity-0"></a></td>
-                    <td class="px-6"><a th:href="@{'/match/'+${e.id}}" class="link-dark link-underline-opacity-0"> More Details </a> </td>
+                    <td class="px-6"><a class="link-dark link-underline-opacity-0" th:href="@{'/club/'+${e.homeTeam.id}}"
+                                        th:text="${e.homeTeam.name}"></a></td>
+                    <!--                    <td class="px-6 text-center table-active" th:text="${e.score}"></td>-->
+                    <td class="px-6 text-center table-active"><a class="link-dark link-underline-opacity-0" th:href="@{'/match/'+${e.id}}"
+                                                                 th:text="${e.score}"></a></td>
+                    <td class="px-6"><a class="link-dark link-underline-opacity-0" th:href="@{'/club/'+${e.awayTeam.id}}"
+                                        th:text="${e.awayTeam.name}"></a></td>
+                    <td class="px-6"><a class="link-dark link-underline-opacity-0" th:href="@{'/match/'+${e.id}}"> More
+                        Details </a></td>
                 </tr>
             </div>
             </tbody>
@@ -38,6 +42,6 @@
     </div>
 </div>
 <br><br>
-<footer th:insert="~{blocks/footer :: footer}" class="container"></footer>
+<footer class="container" th:insert="~{blocks/footer :: footer}"></footer>
 </body>
 </html>

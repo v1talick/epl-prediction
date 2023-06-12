@@ -6,11 +6,13 @@ import com.OOP.eplpredictions.entities.enums.Role;
 import java.util.List;
 
 public interface UserService {
-    public void updateUser(User user);
-    public void updateUsers(List<User> users);
-    public boolean createUser(User user);
+    void updateUser(User user);
 
-    public void deleteUser(Long id);
+    void updateUsers(List<User> users);
 
-    public User getUserById(Long id);
+    boolean createUser(User user);
+
+    void deleteUser(Long id);
+
+    User getUserById(Long id);
 }

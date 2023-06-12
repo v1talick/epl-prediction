@@ -2,6 +2,7 @@ package com.OOP.eplpredictions.controllers;
 
 
 import com.OOP.eplpredictions.entities.Match;
+import com.OOP.eplpredictions.entities.Prediction;
 import com.OOP.eplpredictions.entities.User;
 import com.OOP.eplpredictions.services.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,9 @@ public class MatchController {
         this.matchService = matchService;
     }
 
-//    @GetMapping(path = "/matches")
-//    public ResponseEntity<List<Match>> listMatches() {
-//        return new ResponseEntity<>(matchService.getAllMatches(), HttpStatus.OK);
-//    }
     @GetMapping("/matches")
     public String matches(Model model) {
         Iterable<Match> matches
-//                = matchService.getSchedule();
                 = matchService.getAllMatches();
 
         model.addAttribute("matches", matches);
@@ -49,6 +45,7 @@ public class MatchController {
 
     @GetMapping("/match/{id}")
     public String match(@PathVariable int id, Model model) {
+        model.addAttribute("prediction", new Prediction());
         matchService.getMatchById(id).ifPresent(o -> model.addAttribute("match", o));
         return "match";
     }

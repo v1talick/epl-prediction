@@ -5,13 +5,13 @@ import com.OOP.eplpredictions.entities.Prediction;
 import java.util.List;
 
 public interface PredictionService {
-    public boolean createPrediction(Prediction prediction);
+    boolean createPrediction(Prediction prediction);
 
-    public Prediction getPrediction(int id);
+    Prediction getPrediction(int id);
 
-    public void payOffMatchPredictions(int matchId);
+    void payOffMatchPredictions(int matchId);
 
-    public List<Prediction> getPredictionsByMatchId(int matchId);
+    List<Prediction> getPredictionsByMatchId(int matchId);
 
-    public List<Prediction> getAllPredictions();
+    List<Prediction> getAllPredictions();
 }

@@ -70,9 +70,9 @@ public class FootballDataApiRepositoryImpl implements ApiRepository {
 
             for (JsonNode n : fixtures) {
                 id = n.get("id").asInt();
-                homeTeam = clubs.stream().filter(club -> club.getId()==n.get("homeID").asInt())
+                homeTeam = clubs.stream().filter(club -> club.getId() == n.get("homeID").asInt())
                         .findFirst().orElse(new Club());
-                awayTeam = clubs.stream().filter(club -> club.getId()==n.get("awayID").asInt())
+                awayTeam = clubs.stream().filter(club -> club.getId() == n.get("awayID").asInt())
                         .findFirst().orElse(new Club());
 
                 int dateUnix = n.get("date_unix").asInt();
@@ -192,7 +192,7 @@ public class FootballDataApiRepositoryImpl implements ApiRepository {
             JsonNode data = root.get("data");
             JsonNode clubInEpl = data.get(3);
             for (JsonNode n : data) {
-                if (n.get("competition_id").asInt() == seasonId){
+                if (n.get("competition_id").asInt() == seasonId) {
                     clubInEpl = n;
                 }
             }

@@ -44,7 +44,7 @@ public class UserServiceTest {
 
         // Save the user
 //        User savedUser =
-                userService.deleteUser(new Long(1));
+        userService.deleteUser(new Long(1));
 
         // Check if the user was saved successfully
 //        assertNotNull(savedUser.getId());

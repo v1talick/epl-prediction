@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/profile")
                         .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-                        .requestMatchers("/", "/error","/table", "/club/**","/match/**","/registration", "/schedule", "/css/style.css", "https://icons-for-free.com/download-icon-basketball-131983719702443362_512.png")
+                        .requestMatchers("/", "/error", "/table", "/club/**", "/match/**", "/registration", "/schedule", "/css/style.css", "https://icons-for-free.com/download-icon-basketball-131983719702443362_512.png")
                         .permitAll()
                         .anyRequest().authenticated()
                 )
