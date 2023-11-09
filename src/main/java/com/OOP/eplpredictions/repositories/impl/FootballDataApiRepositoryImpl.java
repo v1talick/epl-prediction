@@ -1,11 +1,14 @@
 package com.OOP.eplpredictions.repositories.impl;
 
 import com.OOP.eplpredictions.entities.Club;
+import com.OOP.eplpredictions.entities.ClubEntity;
 import com.OOP.eplpredictions.entities.Match;
+import com.OOP.eplpredictions.repositories.ClubRepository;
 import com.OOP.eplpredictions.utils.ApiUtil;
 import com.OOP.eplpredictions.repositories.ApiRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,13 +19,20 @@ import java.util.List;
 @Component
 public class FootballDataApiRepositoryImpl implements ApiRepository {
     private final String key = "test85g57";
-    private final int seasonId = 7704; // EPL season 2022/2023
+    private final int season23 = 7704; // EPL season 2022/2023
+    private final int season24 = 9660; // EPL season 2022/2023
+    private ClubRepository clubRepository;
+
+    @Autowired
+    public void setClubRepository(ClubRepository clubRepository) {
+        this.clubRepository = clubRepository;
+    }
 
 
     @Override
     public List<Match> getAllMatches() {
         String link = String
-                .format("https://api.football-data-api.com/league-matches?key=%s&season_id=%d", key, seasonId);
+                .format("https://api.football-data-api.com/league-matches?key=%s&season_id=%d", key, season23);
 
         return mapResponseToMatchList(ApiUtil.apiToString(link));
     }
@@ -38,7 +48,7 @@ public class FootballDataApiRepositoryImpl implements ApiRepository {
     @Override
     public List<Club> getAllClubs() {
         String link = String
-                .format("https://api.football-data-api.com/league-teams?key=%s&season_id=%d&include=stats", key, seasonId);
+                .format("https://api.football-data-api.com/league-teams?key=%s&season_id=%d&include=stats", key, season23);
 
         return mapResponseToClubList(ApiUtil.apiToString(link));
     }
@@ -61,8 +71,8 @@ public class FootballDataApiRepositoryImpl implements ApiRepository {
             JsonNode fixtures = root.get("data");
 
             int id;
-            Club homeTeam;
-            Club awayTeam;
+            ClubEntity homeTeam;
+            ClubEntity awayTeam;
             Date date;
             String dateStr;
             String status;
@@ -70,10 +80,12 @@ public class FootballDataApiRepositoryImpl implements ApiRepository {
 
             for (JsonNode n : fixtures) {
                 id = n.get("id").asInt();
-                homeTeam = clubs.stream().filter(club -> club.getId() == n.get("homeID").asInt())
-                        .findFirst().orElse(new Club());
-                awayTeam = clubs.stream().filter(club -> club.getId() == n.get("awayID").asInt())
-                        .findFirst().orElse(new Club());
+//                homeTeam = clubs.stream().filter(club -> club.getId() == n.get("homeID").asInt())
+//                        .findFirst().orElse(new Club());
+//                awayTeam = clubs.stream().filter(club -> club.getId() == n.get("awayID").asInt())
+//                        .findFirst().orElse(new Club());
+                homeTeam = clubRepository.findById(n.get("homeID").asInt()).orElse(new ClubEntity());
+                awayTeam = clubRepository.findById(n.get("awayID").asInt()).orElse(new ClubEntity());
 
                 int dateUnix = n.get("date_unix").asInt();
                 date = new Date((long) dateUnix * 1000);
@@ -101,16 +113,18 @@ public class FootballDataApiRepositoryImpl implements ApiRepository {
             JsonNode fixture = root.get("data");
 
             int id;
-            Club homeTeam;
-            Club awayTeam;
+            ClubEntity homeTeam;
+            ClubEntity awayTeam;
             Date date;
             String dateStr;
             String status;
             String score;
 
             id = fixture.get("id").asInt();
-            homeTeam = getClub(fixture.get("homeID").asInt());
-            awayTeam = getClub(fixture.get("awayID").asInt());
+//            homeTeam = getClub(fixture.get("homeID").asInt());
+//            awayTeam = getClub(fixture.get("awayID").asInt());
+            homeTeam = clubRepository.findById(fixture.get("homeID").asInt()).orElse(new ClubEntity());
+            awayTeam = clubRepository.findById(fixture.get("awayID").asInt()).orElse(new ClubEntity());
 
             int dateUnix = fixture.get("date_unix").asInt();
             date = new Date((long) dateUnix * 1000);
@@ -192,7 +206,7 @@ public class FootballDataApiRepositoryImpl implements ApiRepository {
             JsonNode data = root.get("data");
             JsonNode clubInEpl = data.get(3);
             for (JsonNode n : data) {
-                if (n.get("competition_id").asInt() == seasonId) {
+                if (n.get("competition_id").asInt() == season23) {
                     clubInEpl = n;
                 }
             }
@@ -233,10 +247,4 @@ public class FootballDataApiRepositoryImpl implements ApiRepository {
         return club;
     }
 
-//    public static void main(String[] args) {
-//        System.out.println(new FootballDataApiRepositoryImpl().getAllClubs());
-////        System.out.println(new FootballDataApiRepositoryImpl().getClub(143));
-////        System.out.println(new FootballDataApiRepositoryImpl().getAllMatches());
-////        System.out.println(new FootballDataApiRepositoryImpl().getMatch(2782436));
-//    }
 }

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket Prediction</title>
+</head>
+<body>
+<h1>Ticket Prediction</h1>
+
+<div>
+    <p>Prediction ID: <span th:text="${prediction.id}"></span></p>
+    <p>Home Team: <span th:text="${prediction.match.homeTeam}"></span></p>
+    <p>Away Team: <span th:text="${prediction.match.awayTeam}"></span></p>
+    <p>Result: <span th:text="${prediction.result}"></span></p>
+</div>
+</body>
+</html>

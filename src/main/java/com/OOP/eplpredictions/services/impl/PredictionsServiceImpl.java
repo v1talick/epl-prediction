@@ -1,5 +1,6 @@
 package com.OOP.eplpredictions.services.impl;
 
+import com.OOP.eplpredictions.entities.MatchEntity;
 import com.OOP.eplpredictions.entities.Prediction;
 import com.OOP.eplpredictions.entities.PredictionEntity;
 import com.OOP.eplpredictions.entities.User;
@@ -7,58 +8,69 @@ import com.OOP.eplpredictions.entities.enums.Result;
 import com.OOP.eplpredictions.repositories.PredictionRepository;
 import com.OOP.eplpredictions.services.PredictionService;
 import com.OOP.eplpredictions.services.UserService;
+import com.OOP.eplpredictions.utils.MatchUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
-public class PredictionServiceImpl implements PredictionService {
-    private final PredictionRepository predictionRepository;
-    private final UserService userService;
+public class PredictionsServiceImpl implements PredictionService {
+    PredictionRepository predictionRepository;
+    UserService userService;
 
-    public PredictionServiceImpl(PredictionRepository predictionRepository, UserService userService) {
+    public PredictionsServiceImpl(PredictionRepository predictionRepository, UserService userService) {
         this.predictionRepository = predictionRepository;
         this.userService = userService;
     }
 
     @Override
-    public boolean createPrediction(Prediction prediction) {
-        System.out.println("\n\n\n" + prediction);
-        if (!Objects.equals(prediction.getMatch().getStatus(), "incomplete")
-                || prediction.getUser().getPoints() < prediction.getPoints() || prediction.getPoints() <= 0) {
-            //u cant make a match prediction that is finished
-            return true;
-        }
-        User user = prediction.getUser();
-        user.setPoints(user.getPoints() - prediction.getPoints());
-        userService.updateUser(user);
-        predictionRepository.save(predictionToPredictionEntity(prediction));
-
-        return false;
-    }
-
-    @Override
     public Prediction getPrediction(int id) {
-        return predictionEntityToPrediction(predictionRepository.findById(id)
-                .orElse(new PredictionEntity()));
+        return predictionEntityToPrediction(predictionRepository.findById(id).orElse(new PredictionEntity()));
     }
 
     @Override
-    public void payOffMatchPredictions(int matchId) {
-        List<Prediction> allPredictions = predictionRepository.findPredictionByMatchId(matchId)
+    public List<Prediction> getAllPredictions() {
+        return predictionRepository.findAll().stream().map(this::predictionEntityToPrediction).toList();
+    }
+
+    @Override
+    public void createPrediction(Prediction prediction) {
+        if (!Objects.equals(prediction.getMatch().getStatus(), "incomplete")
+                || prediction.getPoints() > prediction.getUser().getPoints() || prediction.getPoints() <= 0) {
+            throw new RuntimeException("incorrect data");
+        }
+        User u = prediction.getUser();
+        u.setPoints(u.getPoints() - prediction.getPoints());
+        userService.updateUser(u);
+
+        predictionRepository.save(predictionToPredictionEntity(prediction));
+    }
+
+    @Override
+    public void updatePrediction(Prediction prediction) {
+        createPrediction(prediction);
+    }
+
+    @Override
+    public void deletePrediction(int id) {
+        predictionRepository.deleteById(id);
+    }
+
+    @Override
+    public void countPredictions(int matchId) {
+        List<Prediction> predictions = predictionRepository.findPredictionsByMatchId(matchId)
                 .stream().map(this::predictionEntityToPrediction).toList();
-        if (!allPredictions.isEmpty()) {
-            countPointsToUser(allPredictions);
+
+        if (!predictions.isEmpty()) {
+            countPointsToUser(predictions);
         }
     }
 
     private void countPointsToUser(List<Prediction> predictions) {
         int allPoints = predictions.stream().mapToInt(Prediction::getPoints).sum();
-        Result matchResult = getResult(predictions.get(0).getMatch().getStatus());
+        Result matchResult = MatchUtil.scoreToResult(predictions.get(0).getMatch().getStatus());
         List<Prediction> wonPredictions = predictions
                 .stream().filter(prediction -> prediction.getResult() == matchResult).toList();
 
@@ -73,57 +85,31 @@ public class PredictionServiceImpl implements PredictionService {
                 wonUsers.add(u);
             }
             userService.updateUsers(wonUsers);
+            System.out.println("\n\n\n" + wonUsers);
         }
     }
 
-    private Result getResult(String score) {
-        Pattern pattern = Pattern.compile("(\\d+) - (\\d+)");
-        Matcher matcher = pattern.matcher(score);
-
-        if (matcher.matches()) {
-            int homeScore = Integer.parseInt(matcher.group(1));
-            int awayScore = Integer.parseInt(matcher.group(2));
-
-            if (homeScore > awayScore) {
-                return Result.HOME_WIN;
-            } else if (homeScore < awayScore) {
-                return Result.AWAY_WIN;
-            }
-        }
-
+    private Result scoreToResult(String score) {
         return Result.DRAW;
-    }
-
-    @Override
-    public List<Prediction> getPredictionsByMatchId(int matchId) {
-        return predictionRepository.findPredictionByMatchId(matchId)
-                .stream().map(this::predictionEntityToPrediction).toList();
-//        return null;
-    }
-
-    @Override
-    public List<Prediction> getAllPredictions() {
-        return predictionRepository.findAll().stream()
-                .map(this::predictionEntityToPrediction).toList();
     }
 
     private Prediction predictionEntityToPrediction(PredictionEntity predictionEntity) {
         return Prediction.builder()
                 .id(predictionEntity.getId())
-                .user(predictionEntity.getUser())
-                .match(predictionEntity.getMatch())
                 .points(predictionEntity.getPoints())
                 .result(predictionEntity.getResult())
+                .user(predictionEntity.getUser())
+                .match(predictionEntity.getMatch())
                 .build();
     }
 
     private PredictionEntity predictionToPredictionEntity(Prediction prediction) {
         return PredictionEntity.builder()
                 .id(prediction.getId())
-                .user(prediction.getUser())
-                .match(prediction.getMatch())
                 .points(prediction.getPoints())
                 .result(prediction.getResult())
+                .user(prediction.getUser())
+                .match(prediction.getMatch())
                 .build();
     }
 }

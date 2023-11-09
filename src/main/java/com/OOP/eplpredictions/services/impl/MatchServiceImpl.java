@@ -1,36 +1,34 @@
 package com.OOP.eplpredictions.services.impl;
 
-import com.OOP.eplpredictions.entities.Club;
-import com.OOP.eplpredictions.entities.ClubEntity;
 import com.OOP.eplpredictions.entities.Match;
 import com.OOP.eplpredictions.entities.MatchEntity;
 import com.OOP.eplpredictions.repositories.ApiRepository;
 import com.OOP.eplpredictions.repositories.MatchRepository;
 import com.OOP.eplpredictions.services.MatchService;
 import com.OOP.eplpredictions.services.PredictionService;
-import com.OOP.eplpredictions.utils.DateUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class MatchServiceImpl implements MatchService {
-    private final MatchRepository matchRepository;
-    private final ApiRepository apiRepository;
-    private final PredictionService predictionService;
-    private final List<Club> clubs;
+    private MatchRepository matchRepository;
+    private PredictionService predictionService;
+    private ApiRepository apiRepository;
 
 
-    @Autowired
-    public MatchServiceImpl(MatchRepository matchRepository, ApiRepository apiRepository, PredictionService predictionService) {
-        this.matchRepository = matchRepository;
-        this.apiRepository = apiRepository;
-        this.predictionService = predictionService;
-        this.clubs = apiRepository.getAllClubs();
+    @Override
+    public List<Match> getAllMatches() {
+        return matchRepository.findAll().stream().map(this::matchEntityToMatch).toList();
+    }
+
+    @Override
+    public Match getMatch(int matchId) {
+        return matchEntityToMatch(matchRepository.findById(matchId).orElse(new MatchEntity()));
     }
 
     @Override
@@ -39,106 +37,54 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public void createAllMatches(List<Match> matches) {
-        List<MatchEntity> matchEntityList = matches.stream().map(this::matchToMatchEntity).toList();
-        matchRepository.saveAll(matchEntityList);
+    public void updateMatch(Match match) {
+        matchRepository.save(matchToMatchEntity(match));
     }
 
     @Override
-    public Match updateMatch(Match match) {
-        return matchEntityToMatch(matchRepository.save(matchToMatchEntity(match)));
-    }
-
-    @Override
-    public void deleteMatch(int id) {
-        matchRepository.deleteById(id);
-    }
-
-    @Override
-    public Optional<Match> getMatchById(int matchId) {
-//        MatchEntity match = matchRepository.findById(matchId);
-        Optional<MatchEntity> match = matchRepository.findById(matchId);
-        return match.map(this::matchEntityToMatch);
-    }
-
-    @Override
-    public List<Match> getAllMatches() {
-        List<MatchEntity> matchEntities = matchRepository.findAll();
-        return matchEntities.stream().map(this::matchEntityToMatch).toList();
-    }
-
-    @Override
-    public List<Match> getSchedule() {
-        return getAllMatches().stream()
-                .filter(match -> DateUtil.isScheduleDate(match.getTime())).toList();
-//                .filter(match -> !DateUtil.isFirstDate7DaysLater(match.getTime(), new Date())
-//                && new Date().before(match.getTime())).toList();
-    }
-
-
-    private Match matchEntityToMatch(MatchEntity matchEntity) {
-        if (!Objects.equals(matchEntity.getStatus(), "incomplete")) {
-            return Match.builder()
-                    .id(matchEntity.getId())
-                    .homeTeam(clubEntityToClub(matchEntity.getHomeTeam()))
-                    .awayTeam(clubEntityToClub(matchEntity.getAwayTeam()))
-                    .time(matchEntity.getTime())
-                    .score(matchEntity.getStatus())
-                    .status("complete")
-                    .build();
-        }
-
-        if (new Date().before(matchEntity.getTime())) {// checks if date is  later than current time
-            return Match.builder()
-                    .id(matchEntity.getId())
-//                    .homeName(matchEntity.getHomeName())
-//                    .awayName(matchEntity.getAwayName())
-                    .homeTeam(clubEntityToClub(matchEntity.getHomeTeam()))
-                    .awayTeam(clubEntityToClub(matchEntity.getAwayTeam()))
-                    .time(matchEntity.getTime())
-                    .score("- : -")
-                    .status("incomplete")
-                    .build();
-        }
-
-        Match match = apiRepository.getMatch(matchEntity.getId());
-
-        if (Objects.equals(match.getStatus(), "complete")) {
-            matchRepository.save(matchToMatchEntity(match));
-            predictionService.payOffMatchPredictions(match.getId());
-        }
-
-        return match;
+    public void deleteMatch(int matchId) {
+        matchRepository.deleteById(matchId);
     }
 
     private MatchEntity matchToMatchEntity(Match match) {
-        MatchEntity matchEntity = MatchEntity.builder()
+        return MatchEntity.builder()
                 .id(match.getId())
-//                .homeName(match.getHomeName())
-//                .awayName(match.getAwayName())
-                .homeTeam(clubToClubEntity(match.getHomeTeam()))
-                .awayTeam(clubToClubEntity(match.getAwayTeam()))
+                .homeTeam(match.getHomeTeam())
+                .awayTeam(match.getAwayTeam())
+                .status(match.getScore())
                 .time(match.getTime())
-                .status(match.getStatus())
-                .build();
-
-        if (matchEntity.getStatus().equals("complete"))
-            matchEntity.setStatus(match.getScore());
-
-        return matchEntity;
-    }
-
-    private ClubEntity clubToClubEntity(Club club) {
-        return ClubEntity.builder()
-                .id(club.getId())
-                .country(club.getCountry())
-                .name(club.getName())
-                .logoLink(club.getLogoLink())
                 .build();
     }
+    private Match matchEntityToMatch(MatchEntity matchEntity) {
+        if(Objects.equals(matchEntity.getStatus(), "incomplete")
+                && matchEntity.getTime().before(new Date())){
 
-    private Club clubEntityToClub(ClubEntity clubEntity) {
-//        return apiRepository.getClub(clubEntity.getId());
-        return clubs.stream().filter(club -> club.getId() == clubEntity.getId()).findFirst().orElse(new Club());
+            Match match = apiRepository.getMatch(matchEntity.getId());
+            updateMatch(match);
+            System.out.println("\n\n\n"+match);
+            if(Objects.equals(match.getStatus(), "complete")){
+                predictionService.countPredictions(match.getId());
+            }
+
+            return match;
+        }
+        if(!Objects.equals(matchEntity.getStatus(), "incomplete")){
+            return Match.builder()
+                    .id(matchEntity.getId())
+                    .time(matchEntity.getTime())
+                    .score(matchEntity.getStatus())
+                    .status("complete")
+                    .awayTeam(matchEntity.getAwayTeam())
+                    .homeTeam(matchEntity.getHomeTeam())
+                    .build();
+        }
+        return Match.builder()
+                .id(matchEntity.getId())
+                .status(matchEntity.getStatus())
+                .score("- : -")
+                .time(matchEntity.getTime())
+                .awayTeam(matchEntity.getAwayTeam())
+                .homeTeam(matchEntity.getHomeTeam())
+                .build();
     }
 }

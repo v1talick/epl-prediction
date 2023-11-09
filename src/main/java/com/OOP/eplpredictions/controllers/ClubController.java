@@ -7,29 +7,28 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.Comparator;
+
 @Controller
 public class ClubController {
     ClubService clubService;
-
-//    @GetMapping(path = "/table")
-//    public ResponseEntity<List<Club>> table(){
-//        return new ResponseEntity<>(clubService.getAllClubs(), HttpStatus.OK);
-//    }
 
     public ClubController(ClubService clubService) {
         this.clubService = clubService;
     }
 
-    @GetMapping(path = "/table")
-    public String table(Model model) {
-        Iterable<Club> clubs = clubService.getAllClubs();
-        model.addAttribute("clubs", clubs);
+    @GetMapping("table")
+    public String getTable(Model model) {
+        model.addAttribute("clubs", clubService.getAllClubs()
+                .stream()
+                .sorted(Comparator.comparing(Club::getTablePosition)));
+
         return "table";
     }
-
-    @GetMapping(path = "/club/{id}")
-    public String club(@PathVariable int id, Model model) {
+    @GetMapping("club/{id}")
+    public String getClub(@PathVariable("id") int id, Model model) {
         model.addAttribute("club", clubService.getClub(id));
+
         return "club";
     }
 }

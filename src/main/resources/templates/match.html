@@ -31,7 +31,8 @@
     <br>
     <h1>Make a bet</h1>
 
-    <form method="post" th:action="@{/bet}" th:if="${match.status == 'incomplete'}">
+<!--    <form method="post" th:action="@{/bet}" th:if="${match.status == 'incomplete'}">-->
+    <form method="post" th:action="@{/bet}">
         <div class="form-group">
             <label for="points">Number of Points:</label>
             <input class="form-control" id="points" name="points" required type="number">
